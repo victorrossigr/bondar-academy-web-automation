@@ -7,4 +7,8 @@ export class HelperBase {
     constructor(page: Page) {
         this.page = page
     }
+
+    protected async getToasterMessage(){
+        // method that validates an toaster that appear in every page
+    }
 }

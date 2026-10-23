@@ -1,13 +1,13 @@
 import { Locator, Page } from '@playwright/test'
 import { step } from '../helpers/test-step-decorator'
+import { HelperBase } from './helper-base'
 
-export class NavigationPage {
+export class NavigationPage extends HelperBase{
 
-    private readonly page: Page
     // readonly formLayoutsMenu: Locator
 
     constructor(page: Page) {
-        this.page = page
+        super(page)
         // this.formLayoutsMenu = page.getByText('Forms')
     }
 
