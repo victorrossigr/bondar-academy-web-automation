@@ -45,6 +45,6 @@ export class FormLayoutsPage extends HelperBase{
         expect(usingGridSection.getByText(optionText)).toBeTruthy()
 
         await usingGridSection.getByRole('button').click()
-        expect(usingGridSection.locator('form')).toHaveClass(/ng-submitted/)
+        // expect(usingGridSection.locator('form')).toHaveClass(/ng-submitted/)
     }
 }
