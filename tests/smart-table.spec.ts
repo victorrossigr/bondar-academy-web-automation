@@ -3,7 +3,7 @@ import { PageManager } from '../page-objects/page-manager';
 
 test.beforeEach(async ({ page }) => {
     const pom = new PageManager(page)
-    await page.goto('https://playground.bondaracademy.com/')
+    await page.goto('/')
     await pom.navigateTo.smartTablePage()
 })
 

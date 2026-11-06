@@ -2,7 +2,7 @@ import { test } from '@playwright/test';
 import { PageManager } from '../page-objects/page-manager';
 
 test.beforeEach(async ({ page }) => {
-    await page.goto('https://playground.bondaracademy.com/')
+    await page.goto('/')
 })
 
 test('Navigating to every page', async ({ page }) => {
