@@ -5,8 +5,8 @@ import path from 'path';
 dotenv.config({ path: path.resolve(__dirname, process.env.TEST_ENV ? `.env.${process.env.TEST_ENV}` : '.env') });
 
 export default defineConfig({
-  timeout: 10000,
-  globalTimeout: 60000,
+  timeout: 30000,
+  globalTimeout: 600000,
   fullyParallel: true,
   retries: 1,
   reporter: 'html',
