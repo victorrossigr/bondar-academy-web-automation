@@ -1,49 +1,53 @@
 import { test, expect } from '@playwright/test';
 import { PageManager } from '../page-objects/page-manager';
 
-test.beforeEach(async ({ page }) => {
-    const pom = new PageManager(page)
-    await page.goto('/')
-    await pom.navigateTo.smartTablePage()
-})
+test.describe('Smart Table page', () => {
 
-test('Excluding a row', async ({ page }) => {
-    const tableRowByEmail = page.getByRole('row', { name: 'snow@gmail.com' })
-    // selecting a row by a visible text on the table
-
-    page.on('dialog', nativeDialog => {
-        expect(nativeDialog.message()).toEqual('Are you sure you want to delete?')
-        nativeDialog.accept()
+    test.beforeEach(async ({ page }) => {
+        const pom = new PageManager(page)
+        await page.goto('/')
+        await pom.navigateTo.smartTablePage()
     })
-    // this method allow playwright to accept the browser's native dialog
 
-    await tableRowByEmail.locator('.nb-trash').click()
-    await expect(tableRowByEmail).not.toBeVisible()
-})
+    test('Excluding a row', async ({ page }) => {
+        const tableRowByEmail = page.getByRole('row', { name: 'snow@gmail.com' })
+        // selecting a row by a visible text on the table
 
-test('Editing a row', async ({ page }) => {
-    const tableRowById = page.getByRole('row').filter({ has: page.getByRole('cell').nth(1).getByText('10') })
-    // selecting a row by a column specific value
+        page.on('dialog', nativeDialog => {
+            expect(nativeDialog.message()).toEqual('Are you sure you want to delete?')
+            nativeDialog.accept()
+        })
+        // this method allow playwright to accept the browser's native dialog
 
-    await tableRowById.locator('.nb-edit').click()
-    await page.locator('tbody').getByPlaceholder('E-mail').fill('email@test.com')
-    await page.locator('tbody').locator('.nb-checkmark').click()
-    await expect(tableRowById.locator('td').nth(5)).toHaveText('email@test.com')
-})
+        await tableRowByEmail.locator('.nb-trash').click()
+        await expect(tableRowByEmail).not.toBeVisible()
+    })
 
-test('Validating the table filter', async ({ page }) => {
-    const ages = ['20', '30', '40', '200']
+    test('Editing a row', async ({ page }) => {
+        const tableRowById = page.getByRole('row').filter({ has: page.getByRole('cell').nth(1).getByText('10') })
+        // selecting a row by a column specific value
 
-    for (let age of ages) {
-        await page.locator('th').getByPlaceholder('Age').fill(age)
-        if (age == '200') {
-            await expect(page.locator('tbody')).toContainText('No data found')
-        } else {
-            await expect(page.locator('tbody tr').first().getByRole('cell').nth(6)).toHaveText(age)
-            const allTableRows = await page.locator('tbody tr').all()
-            for (let row of allTableRows) {
-                await expect(row.locator('td').last()).toHaveText(age)
+        await tableRowById.locator('.nb-edit').click()
+        await page.locator('tbody').getByPlaceholder('E-mail').fill('email@test.com')
+        await page.locator('tbody').locator('.nb-checkmark').click()
+        await expect(tableRowById.locator('td').nth(5)).toHaveText('email@test.com')
+    })
+
+    test('Validating the table filter', async ({ page }) => {
+        const ages = ['20', '30', '40', '200']
+
+        for (let age of ages) {
+            await page.locator('th').getByPlaceholder('Age').fill(age)
+            if (age == '200') {
+                await expect(page.locator('tbody')).toContainText('No data found')
+            } else {
+                await expect(page.locator('tbody tr').first().getByRole('cell').nth(6)).toHaveText(age)
+                const allTableRows = await page.locator('tbody tr').all()
+                for (let row of allTableRows) {
+                    await expect(row.locator('td').last()).toHaveText(age)
+                }
             }
         }
-    }
+    })
+
 })

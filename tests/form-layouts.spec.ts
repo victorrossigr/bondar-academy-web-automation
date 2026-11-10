@@ -2,73 +2,77 @@ import { test, expect } from '@playwright/test';
 import { PageManager } from '../page-objects/page-manager';
 import { faker } from '@faker-js/faker'
 
-test.beforeEach(async ({ page }) => {
-    const pom = new PageManager(page)
-    await page.goto('/')
-    await pom.navigateTo.formLayoutsPage()
-})
+test.describe('Form Layouts page', () => {
 
-test('Submiting forms with parametrized page object methods', async ({ page }) => {
-    const pom = new PageManager(page)
-    const randomName = faker.person.fullName()
-    const randomEmail = faker.internet.email({provider: 'test.com'})
+    test.beforeEach(async ({ page }) => {
+        const pom = new PageManager(page)
+        await page.goto('/')
+        await pom.navigateTo.formLayoutsPage()
+    })
 
-    await pom.formLayoutsPage.submitInlineForm(randomName, randomEmail, true)
-    await pom.formLayoutsPage.submitUsingTheGrid('victor@test.com', 'password_test', 'Option 2')
-})
+    test('Submiting forms with parametrized page object methods', async ({ page }) => {
+        const pom = new PageManager(page)
+        const randomName = faker.person.fullName()
+        const randomEmail = faker.internet.email({provider: 'test.com'})
 
-test('Inline form', async ({ page }) => {
-    const inlineFormSection = page.getByText('Inline Form').locator('..')
-    await page.getByPlaceholder('Jane Doe').fill('Victor Rossi')
-    expect(page.getByPlaceholder('Jane Doe')).toHaveValue('Victor Rossi')
+        await pom.formLayoutsPage.submitInlineForm(randomName, randomEmail, true)
+        await pom.formLayoutsPage.submitUsingTheGrid('victor@test.com', 'password_test', 'Option 2')
+    })
 
-    await inlineFormSection.getByPlaceholder('Email').fill('email@test.com')
-    expect(inlineFormSection.getByPlaceholder('Email')).toHaveValue('email@test.com')
+    test('Inline form', async ({ page }) => {
+        const inlineFormSection = page.getByText('Inline Form').locator('..')
+        await page.getByPlaceholder('Jane Doe').fill('Victor Rossi')
+        expect(page.getByPlaceholder('Jane Doe')).toHaveValue('Victor Rossi')
 
-    await inlineFormSection.getByRole('checkbox', { name: 'Remember me' }).check({ force: true })
-    expect(inlineFormSection.getByRole('checkbox', { name: 'Remember me' })).toBeChecked()
+        await inlineFormSection.getByPlaceholder('Email').fill('email@test.com')
+        expect(inlineFormSection.getByPlaceholder('Email')).toHaveValue('email@test.com')
 
-    await inlineFormSection.getByRole('button').click()
-    // expect(inlineFormSection.locator('form')).toHaveClass(/ng-submitted/)
-})
+        await inlineFormSection.getByRole('checkbox', { name: 'Remember me' }).check({ force: true })
+        expect(inlineFormSection.getByRole('checkbox', { name: 'Remember me' })).toBeChecked()
 
-test('Using the grid', async ({ page }) => {
-    const usingGridSection = page.locator('nb-card').filter({ hasText: 'Using the Grid' })
+        await inlineFormSection.getByRole('button').click()
+        // expect(inlineFormSection.locator('form')).toHaveClass(/ng-submitted/)
+    })
 
-    await usingGridSection.getByPlaceholder('Email').fill('email@text.com')
-    expect(usingGridSection.getByPlaceholder('Email')).toHaveValue('email@text.com')
+    test('Using the grid', async ({ page }) => {
+        const usingGridSection = page.locator('nb-card').filter({ hasText: 'Using the Grid' })
 
-    await usingGridSection.getByPlaceholder('Password').fill('senha_teste123')
-    expect(usingGridSection.getByPlaceholder('Password')).toHaveValue('senha_teste123')
+        await usingGridSection.getByPlaceholder('Email').fill('email@text.com')
+        expect(usingGridSection.getByPlaceholder('Email')).toHaveValue('email@text.com')
 
-    // await usingGridSection.getByRole('radio', {name: 'Option 1'}).click({force: true})
-    await usingGridSection.getByText('Option 1').click()
-    expect(usingGridSection.getByText('Option 1')).toBeTruthy()
+        await usingGridSection.getByPlaceholder('Password').fill('senha_teste123')
+        expect(usingGridSection.getByPlaceholder('Password')).toHaveValue('senha_teste123')
 
-    expect(usingGridSection.locator('form')).not.toHaveClass(/ng-submitted/)
-    await usingGridSection.getByRole('button').click()
-    // expect(usingGridSection.locator('form')).toHaveClass(/ng-submitted/)
-})
+        // await usingGridSection.getByRole('radio', {name: 'Option 1'}).click({force: true})
+        await usingGridSection.getByText('Option 1').click()
+        expect(usingGridSection.getByText('Option 1')).toBeTruthy()
 
-test('Basic form generated and clean', async ({ page }) => {
-    await page.getByRole('textbox', { name: 'Email address' }).fill('email@test.com')
-    await page.locator('#exampleInputPassword1').fill('senha_teste123')
-    await page.locator('.form-group > .status-basic > .label > .custom-checkbox').click()
-    await page.getByRole('checkbox', { name: 'Check me out' }).check()
-    await page.locator('nb-card').filter({ hasText: 'Basic formEmail' }).getByRole('button').click()
-})
+        expect(usingGridSection.locator('form')).not.toHaveClass(/ng-submitted/)
+        await usingGridSection.getByRole('button').click()
+        // expect(usingGridSection.locator('form')).toHaveClass(/ng-submitted/)
+    })
 
-test('Form wihtout labels generated and improved', async ({ page }) => {
-    await page.getByRole('textbox', { name: 'Recipients' }).fill('Recipient test')
-    await expect(page.getByRole('textbox', { name: 'Recipients' })).toHaveValue('Recipient test')
+    test('Basic form generated and clean', async ({ page }) => {
+        await page.getByRole('textbox', { name: 'Email address' }).fill('email@test.com')
+        await page.locator('#exampleInputPassword1').fill('senha_teste123')
+        await page.locator('.form-group > .status-basic > .label > .custom-checkbox').click()
+        await page.getByRole('checkbox', { name: 'Check me out' }).check()
+        await page.locator('nb-card').filter({ hasText: 'Basic formEmail' }).getByRole('button').click()
+    })
 
-    await page.getByRole('textbox', { name: 'Subject' }).fill('Subject test')
-    await expect(page.getByRole('textbox', { name: 'Subject' })).toHaveValue('Subject test')
+    test('Form wihtout labels generated and improved', async ({ page }) => {
+        await page.getByRole('textbox', { name: 'Recipients' }).fill('Recipient test')
+        await expect(page.getByRole('textbox', { name: 'Recipients' })).toHaveValue('Recipient test')
 
-    await page.getByRole('textbox', { name: 'Message' }).fill('This is a test message')
-    await expect(page.getByRole('textbox', { name: 'Message' })).toHaveValue('This is a test message')
+        await page.getByRole('textbox', { name: 'Subject' }).fill('Subject test')
+        await expect(page.getByRole('textbox', { name: 'Subject' })).toHaveValue('Subject test')
 
-    await page.getByRole('button', { name: 'Send' }).click()
-    await expect(page.locator('nb-card').filter({ hasText: 'Form without labels' }).locator('form')).toHaveClass(/ng-submitted/)
-    // await expect(page.locator('nb-card').filter({ hasText: 'Form without labels' }).locator('.ng-submitted')).toBeVisible()
+        await page.getByRole('textbox', { name: 'Message' }).fill('This is a test message')
+        await expect(page.getByRole('textbox', { name: 'Message' })).toHaveValue('This is a test message')
+
+        await page.getByRole('button', { name: 'Send' }).click()
+        await expect(page.locator('nb-card').filter({ hasText: 'Form without labels' }).locator('form')).toHaveClass(/ng-submitted/)
+        // await expect(page.locator('nb-card').filter({ hasText: 'Form without labels' }).locator('.ng-submitted')).toBeVisible()
+    })
+
 })
