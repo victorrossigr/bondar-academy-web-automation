@@ -36,13 +36,13 @@ export class FormLayoutsPage extends HelperBase{
         const usingGridSection = this.page.locator('nb-card').filter({ hasText: 'Using the Grid' })
 
         await usingGridSection.getByPlaceholder('Email').fill(email)
-        expect(usingGridSection.getByPlaceholder('Email')).toHaveValue(email)
+        await expect(usingGridSection.getByPlaceholder('Email')).toHaveValue(email)
 
         await usingGridSection.getByPlaceholder('Password').fill(password)
-        expect(usingGridSection.getByPlaceholder('Password')).toHaveValue(password)
+        await expect(usingGridSection.getByPlaceholder('Password')).toHaveValue(password)
 
         await usingGridSection.getByText(optionText).click({ force: true })
-        expect(usingGridSection.getByText(optionText)).toBeTruthy()
+        await expect(usingGridSection.getByText(optionText)).toBeChecked()
 
         await usingGridSection.getByRole('button').click()
         // expect(usingGridSection.locator('form')).toHaveClass(/ng-submitted/)
