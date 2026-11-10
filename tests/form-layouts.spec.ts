@@ -22,13 +22,13 @@ test.describe('Form Layouts page', () => {
     test('Inline form', async ({ page }) => {
         const inlineFormSection = page.getByText('Inline Form').locator('..')
         await page.getByPlaceholder('Jane Doe').fill('Victor Rossi')
-        expect(page.getByPlaceholder('Jane Doe')).toHaveValue('Victor Rossi')
+        await expect(page.getByPlaceholder('Jane Doe')).toHaveValue('Victor Rossi')
 
         await inlineFormSection.getByPlaceholder('Email').fill('email@test.com')
-        expect(inlineFormSection.getByPlaceholder('Email')).toHaveValue('email@test.com')
+        await expect(inlineFormSection.getByPlaceholder('Email')).toHaveValue('email@test.com')
 
         await inlineFormSection.getByRole('checkbox', { name: 'Remember me' }).check({ force: true })
-        expect(inlineFormSection.getByRole('checkbox', { name: 'Remember me' })).toBeChecked()
+        await expect(inlineFormSection.getByRole('checkbox', { name: 'Remember me' })).toBeChecked()
 
         await inlineFormSection.getByRole('button').click()
         // expect(inlineFormSection.locator('form')).toHaveClass(/ng-submitted/)
@@ -38,16 +38,16 @@ test.describe('Form Layouts page', () => {
         const usingGridSection = page.locator('nb-card').filter({ hasText: 'Using the Grid' })
 
         await usingGridSection.getByPlaceholder('Email').fill('email@text.com')
-        expect(usingGridSection.getByPlaceholder('Email')).toHaveValue('email@text.com')
+        await expect(usingGridSection.getByPlaceholder('Email')).toHaveValue('email@text.com')
 
         await usingGridSection.getByPlaceholder('Password').fill('senha_teste123')
-        expect(usingGridSection.getByPlaceholder('Password')).toHaveValue('senha_teste123')
+        await expect(usingGridSection.getByPlaceholder('Password')).toHaveValue('senha_teste123')
 
         // await usingGridSection.getByRole('radio', {name: 'Option 1'}).click({force: true})
         await usingGridSection.getByText('Option 1').click()
-        expect(usingGridSection.getByText('Option 1')).toBeTruthy()
+        expect(usingGridSection.getByText('Option 1')).toBeChecked()
 
-        expect(usingGridSection.locator('form')).not.toHaveClass(/ng-submitted/)
+        await expect(usingGridSection.locator('form')).not.toHaveClass(/ng-submitted/)
         await usingGridSection.getByRole('button').click()
         // expect(usingGridSection.locator('form')).toHaveClass(/ng-submitted/)
     })
