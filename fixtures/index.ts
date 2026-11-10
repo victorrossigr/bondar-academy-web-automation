@@ -12,3 +12,5 @@ export const test = base.extend<FixtureTypes>({
         await use(manager)
     }
 })
+
+export { expect } from '@playwright/test';

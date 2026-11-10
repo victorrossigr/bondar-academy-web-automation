@@ -1,14 +1,8 @@
-import { test } from '@playwright/test';
-import { PageManager } from '../page-objects/page-manager';
+import { test } from '../fixtures';
 
 test.describe('Navigation menu', () => {
 
-    test.beforeEach(async ({ page }) => {
-        await page.goto('/')
-    })
-
-    test('Navigating to every page', async ({ page }) => {
-        const pom = new PageManager(page)
+    test('Navigating to every page', async ({ pom }) => {
         await pom.navigateTo.formLayoutsPage()
         await pom.navigateTo.datePickerPage()
         await pom.navigateTo.dialogPage()

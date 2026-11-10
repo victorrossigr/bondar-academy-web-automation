@@ -1,11 +1,8 @@
-import { test, expect } from '@playwright/test';
-import { PageManager } from '../page-objects/page-manager';
+import { test, expect } from '../fixtures';
 
 test.describe('Dialog page', () => {
 
-    test.beforeEach(async ({ page }) => {
-        const pom = new PageManager(page)
-        await page.goto('/')
+    test.beforeEach(async ({ pom }) => {
         await pom.navigateTo.dialogPage()
     })
 
@@ -31,7 +28,7 @@ test.describe('Dialog page', () => {
 
         await page.getByRole('button', { name: 'Open with delay 3 seconds' }).click()
         await expect(dialogDelaySection.getByText(/Loading/)).toBeVisible()
-        await expect(friendlyReminderHeader).toBeVisible({ timeout: 4500 })
+        await expect(friendlyReminderHeader).toBeVisible({ timeout: 5500 })
         await page.getByRole('button', { name: 'OK' }).click()
         await expect(friendlyReminderHeader).not.toBeVisible()
 

@@ -1,17 +1,13 @@
-import { test, expect } from '@playwright/test';
-import { PageManager } from '../page-objects/page-manager';
+import { test, expect } from '../fixtures';
 import { faker } from '@faker-js/faker'
 
 test.describe('Form Layouts page', () => {
 
-    test.beforeEach(async ({ page }) => {
-        const pom = new PageManager(page)
-        await page.goto('/')
+    test.beforeEach(async ({ pom }) => {
         await pom.navigateTo.formLayoutsPage()
     })
 
-    test('Submiting forms with parametrized page object methods', async ({ page }) => {
-        const pom = new PageManager(page)
+    test('Submiting forms with parametrized page object methods', async ({ pom }) => {
         const randomName = faker.person.fullName()
         const randomEmail = faker.internet.email({provider: 'test.com'})
 

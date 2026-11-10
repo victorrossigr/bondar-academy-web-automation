@@ -1,11 +1,8 @@
-import { test, expect } from '@playwright/test';
-import { PageManager } from '../page-objects/page-manager';
+import { test, expect } from '../fixtures';
 
 test.describe('Smart Table page', () => {
 
-    test.beforeEach(async ({ page }) => {
-        const pom = new PageManager(page)
-        await page.goto('/')
+    test.beforeEach(async ({ pom }) => {
         await pom.navigateTo.smartTablePage()
     })
 
