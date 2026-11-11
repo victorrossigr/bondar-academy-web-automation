@@ -1,11 +1,16 @@
 {
-  "name": "playwright-ui-testing",
+  "name": "bondar-academy-playwright-automation",
   "version": "1.0.0",
-  "description": "",
+  "description": "Bondar Academy playground website automation project with Playwright",
   "main": "index.js",
   "scripts": {
+    "test": "playwright test",
+    "test:chromium": "playwright test --project=chromium",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report",
     "test-forms-chromium": "npx playwright test form-layouts.spec.ts --project=chromium",
-    "test-forms-chromium:qa": "TEST_ENV=qa npx playwright test form-layouts.spec.ts --project=chromium",
+    "test-forms-chromium:qa": "cross-env TEST_ENV=qa npx playwright test form-layouts.spec.ts --project=chromium",
     "test-forms-firefox": "npx playwright test form-layouts.spec.ts --project=firefox",
     "test-forms-all": "npm run test-forms-chromium && npm run test-forms-firefox"
   },
@@ -17,6 +22,7 @@
     "@faker-js/faker": "^10.6.0",
     "@playwright/test": "^1.64.0",
     "@types/node": "^22.20.2",
+    "cross-env": "^10.1.0",
     "dotenv": "^18.0.9"
   }
 }
