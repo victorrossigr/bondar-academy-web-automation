@@ -1,5 +1,5 @@
 import { Page, expect } from '@playwright/test'
-import { step } from '../utils/test-step-decorator'
+import { step } from '../helpers/test-step-decorator'
 import { BasePage } from './base-page'
 
 export class DatepickerPage extends BasePage{
@@ -37,9 +37,13 @@ export class DatepickerPage extends BasePage{
 
         let currentMonthAndYear = await this.page.locator('nb-calendar-view-mode').textContent()
         const expectedMonthAndYear = `${expectedMonthLong} ${expectedYear}`
+        const targetMonth = new Date(date.getFullYear(), date.getMonth(), 1)
 
         while (!currentMonthAndYear?.includes(expectedMonthAndYear)) {
-            await this.page.locator('.next-month').click()
+            const [, monthName, year] = currentMonthAndYear!.match(/([A-Za-z]+)\s+(\d{4})/)!
+            const displayedMonth = new Date(`${monthName} 1, ${year}`)
+            const navigationButton = displayedMonth > targetMonth ? '.prev-month' : '.next-month'
+            await this.page.locator(navigationButton).click()
             currentMonthAndYear = await this.page.locator('nb-calendar-view-mode').textContent()
         }
         await this.page.locator('.day-cell:not(.bounding-month)').getByText(expectedDay, { exact: true }).click()
