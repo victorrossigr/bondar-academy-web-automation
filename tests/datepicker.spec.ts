@@ -6,69 +6,84 @@ test.describe('Datepicker page', () => {
         await pom.navigateTo.datePickerPage()
     })
 
-    test('Selecting dates with parametrized page objects methods', async ({ pom }) => {
-        await pom.datepickerPage.selectCommonDatepickerDateFromToday(5)
-        await pom.datepickerPage.selectDatepickerWithRangeFromToday(8, 14)
+    test.describe('Using page object methods', () => {
+
+        test('Selecting future dates with parametrized page object methods', async ({ pom }) => {
+            await pom.datepickerPage.selectCommonDatepickerDateFromToday(5)
+            await pom.datepickerPage.selectDatepickerWithRangeFromToday(8, 14)
+        })
+
+        test('Selecting past dates with parametrized page object methods', async ({ pom }) => {
+            await pom.datepickerPage.selectCommonDatepickerDateFromToday(-40)
+            await pom.datepickerPage.selectDatepickerWithRangeFromToday(-35, -10)
+        })
+
     })
 
-    test('Simple datepicker', async ({ page }) => {
-        const calendarField = page.getByPlaceholder('Form Picker')
-        await calendarField.click()
+    // Raw implementations, written directly in the test without page objects.
+    // They are kept as a reference to show different approaches to the same scenarios.
+    test.describe('Raw implementations (reference)', () => {
 
-        const date = new Date()
-        date.setDate(date.getDate() + 50)
-        const expectedDay = date.getDate().toString()
-        const expectedMonth = date.toLocaleString('En-US', { month: 'short' })
-        const expectedMonthLong = date.toLocaleString('En-US', { month: 'long' })
-        const expectedYear = date.getFullYear()
-        const expectedDate = `${expectedMonth} ${expectedDay}, ${expectedYear}`
+        test('Common datepicker without page object', async ({ page }) => {
+            const calendarField = page.getByPlaceholder('Form Picker')
+            await calendarField.click()
 
-        let currentMonthAndYear = await page.locator('nb-calendar-view-mode').textContent()
-        const expectedMonthAndYear = `${expectedMonthLong} ${expectedYear}`
+            const date = new Date()
+            date.setDate(date.getDate() + 50)
+            const expectedDay = date.getDate().toString()
+            const expectedMonth = date.toLocaleString('En-US', { month: 'short' })
+            const expectedMonthLong = date.toLocaleString('En-US', { month: 'long' })
+            const expectedYear = date.getFullYear()
+            const expectedDate = `${expectedMonth} ${expectedDay}, ${expectedYear}`
 
-        while (!currentMonthAndYear?.includes(expectedMonthAndYear)) {
-            await page.locator('.next-month').click()
-            currentMonthAndYear = await page.locator('nb-calendar-view-mode').textContent()
-        }
+            let currentMonthAndYear = await page.locator('nb-calendar-view-mode').textContent()
+            const expectedMonthAndYear = `${expectedMonthLong} ${expectedYear}`
 
-        await page.locator('.day-cell:not(.bounding-month)').getByText(expectedDay, { exact: true }).click()
-        await expect(calendarField).toHaveValue(expectedDate)
-    })
-
-    test('Range datepicker AI improved', async ({ page }) => {
-        const dateField = page.getByPlaceholder('Range Picker')
-        await dateField.click()
-
-        const date1 = new Date()
-        date1.setDate(date1.getDate() + 20)
-        const date2 = new Date()
-        date2.setDate(date2.getDate() + 35)
-
-        const formatShort = (d: Date) =>
-            `${d.toLocaleString('en-US', { month: 'short' })} ${d.getDate()}, ${d.getFullYear()}`
-        const formatLongMonthYear = (d: Date) =>
-            `${d.toLocaleString('en-US', { month: 'long' })} ${d.getFullYear()}`
-
-        const expectedDate = `${formatShort(date1)} - ${formatShort(date2)}`
-
-        const selectDay = async (date: Date) => {
-            const monthAndYear = page.locator('nb-calendar-view-mode')
-            const expectedMonthAndYear = formatLongMonthYear(date)
-
-            while (!(await monthAndYear.textContent())?.includes(expectedMonthAndYear)) {
+            while (!currentMonthAndYear?.includes(expectedMonthAndYear)) {
                 await page.locator('.next-month').click()
+                currentMonthAndYear = await page.locator('nb-calendar-view-mode').textContent()
             }
 
-            await page
-                .locator('.day-cell:not(.bounding-month)')
-                .getByText(date.getDate().toString(), { exact: true })
-                .click()
-        }
+            await page.locator('.day-cell:not(.bounding-month)').getByText(expectedDay, { exact: true }).click()
+            await expect(calendarField).toHaveValue(expectedDate)
+        })
 
-        await selectDay(date1)
-        await selectDay(date2)
+        test('Range datepicker with local helper function', async ({ page }) => {
+            const dateField = page.getByPlaceholder('Range Picker')
+            await dateField.click()
 
-        await expect(dateField).toHaveValue(expectedDate)
+            const date1 = new Date()
+            date1.setDate(date1.getDate() + 20)
+            const date2 = new Date()
+            date2.setDate(date2.getDate() + 35)
+
+            const formatShort = (d: Date) =>
+                `${d.toLocaleString('en-US', { month: 'short' })} ${d.getDate()}, ${d.getFullYear()}`
+            const formatLongMonthYear = (d: Date) =>
+                `${d.toLocaleString('en-US', { month: 'long' })} ${d.getFullYear()}`
+
+            const expectedDate = `${formatShort(date1)} - ${formatShort(date2)}`
+
+            const selectDay = async (date: Date) => {
+                const monthAndYear = page.locator('nb-calendar-view-mode')
+                const expectedMonthAndYear = formatLongMonthYear(date)
+
+                while (!(await monthAndYear.textContent())?.includes(expectedMonthAndYear)) {
+                    await page.locator('.next-month').click()
+                }
+
+                await page
+                    .locator('.day-cell:not(.bounding-month)')
+                    .getByText(date.getDate().toString(), { exact: true })
+                    .click()
+            }
+
+            await selectDay(date1)
+            await selectDay(date2)
+
+            await expect(dateField).toHaveValue(expectedDate)
+        })
+
     })
 
 })

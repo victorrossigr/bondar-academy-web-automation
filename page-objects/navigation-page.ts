@@ -1,5 +1,5 @@
 import { Locator, Page } from '@playwright/test'
-import { step } from '../utils/test-step-decorator'
+import { step } from '../helpers/test-step-decorator'
 import { BasePage } from './base-page'
 
 export class NavigationPage extends BasePage{

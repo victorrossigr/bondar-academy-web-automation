@@ -1,16 +1,10 @@
-import { test, expect } from '@playwright/test';
+import { test } from '../fixtures';
 
 test.describe('Dashboard page', () => {
 
-    test.beforeEach(async ({ page }) => {
-        await page.goto('/')
-    })
-
-    test('Coffe maker', async ({ page }) => {
-        await page.locator('nb-card', { hasText: 'Coffee Maker' }).click()
-        await expect(page.locator('nb-card', { hasText: 'Coffee Maker' })).toContainText('OFF')
-        await page.locator('nb-card', { hasText: 'Coffee Maker' }).click()
-        await expect(page.locator('nb-card', { hasText: 'Coffee Maker' })).toContainText('ON')
+    test('Coffe maker', async ({ pom }) => {
+        await pom.dashboardPage.toggleCoffeeMaker('OFF')
+        await pom.dashboardPage.toggleCoffeeMaker('ON')
     })
 
 })
