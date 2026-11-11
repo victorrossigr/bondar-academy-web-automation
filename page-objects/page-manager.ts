@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
 import { NavigationPage } from './navigation-page';
 import { FormLayoutsPage } from './form-layouts-page';
-import { DatepickerPage } from './date-picker-page';
+import { DatepickerPage } from './datepicker-page';
 
 export class PageManager {
 

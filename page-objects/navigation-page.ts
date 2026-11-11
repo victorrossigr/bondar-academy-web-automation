@@ -1,8 +1,8 @@
 import { Locator, Page } from '@playwright/test'
-import { step } from '../helpers/test-step-decorator'
-import { HelperBase } from './helper-base'
+import { step } from '../utils/test-step-decorator'
+import { BasePage } from './base-page'
 
-export class NavigationPage extends HelperBase{
+export class NavigationPage extends BasePage{
 
     // readonly formLayoutsMenu: Locator
 

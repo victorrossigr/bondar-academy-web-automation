@@ -1,8 +1,8 @@
 import { Page, expect } from '@playwright/test'
-import { step } from '../helpers/test-step-decorator'
-import { HelperBase } from './helper-base'
+import { step } from '../utils/test-step-decorator'
+import { BasePage } from './base-page'
 
-export class DatepickerPage extends HelperBase{
+export class DatepickerPage extends BasePage{
 
     constructor(page: Page) {
         super(page)
